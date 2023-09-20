@@ -29,7 +29,7 @@
                 const bruto = await fetch("https://raw.githubusercontent.com/profesorfaco/dno037-2023-2/main/clase-07/_curso.json");
                 const fino = await bruto.json();
                 console.log(fino);
-                document.querySelector("blockquote").innerHTML = `${fino[13].motivo}`;
+                document.querySelector("blockquote").innerHTML = `${fino[22].motivo}`;
             }
             estudiantes().catch((error) => console.error(error));
         </script>
