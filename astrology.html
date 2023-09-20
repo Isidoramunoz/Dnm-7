@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="stylesheet" href="style.css" />
+        <title>Astrology</title>
+    </head>
+    <body>
+        <nav>
+            <h1><a href="index.html">Isidora Muñoz</a></h1>
+            <select onchange="location = this.value;">
+                <option value="index.html">HOLI</option>
+                <option value="astrology.html" selected>ASTROLOGY</option>
+                <option value="astronomy.html">ASTRONOMY</option>
+                <option value="earthquakes.html">EARTHQUAKES</option>
+                <option value="weather.html">WEATHER</option>
+            </select>
+        </nav>
+        <header style="display: none;">
+            <div>Marque uno:</div>
+            <div><input type="radio" name="selecciona" value="todos" checked />Todos</div>
+            <div><input type="radio" name="selecciona" value="agua" />Agua</div>
+            <div><input type="radio" name="selecciona" value="aire" />Aire</div>
+            <div><input type="radio" name="selecciona" value="fuego" />Fuego</div>
+            <div><input type="radio" name="selecciona" value="tierra" />Tierra</div>
+        </header>
+        <aside></aside>
+        <main></main>
+        <script>
+            const alternativas = document.querySelector("header");
+            const detalles = document.querySelector("aside");
+            const respuesta = document.querySelector("main");
+            var datos;
+            async function estudiantes() {
+                const data = await fetch("https://raw.githubusercontent.com/profesorfaco/dno037-2023-2/main/clase-07/_curso.json");
+                datos = await data.json();
+                alternativas.removeAttribute("style");
+                datos.forEach((x) => {
+                    if(x.zodiaco.signo !== ""){
+                        respuesta.innerHTML += `<article><div><img src="${x.avatar}"></div><div><p><a href="integrante.html?lista=${x.lista}">${x.nombres.split(" ")[0]} ${x.apellidos.split(" ")[0]}</a></p><p>${
+                            x.zodiaco.signo                       }</p></div></article>`;
+                    }
+                });
+            }
+            estudiantes().catch((error) => console.error(error));
+
+            function compatibilidad(valor) {
+                respuesta.innerHTML = ``;
+                detalles.innerHTML = ``;
+
+                //Lo que sigue lo saqué de https://horoscoponegro.com/los-signos-del-zodiaco-y-sus-elementos/
+
+                if (valor == "fuego") {
+                    about =
+                        "<em>Con signo de fuego (Aries, Leo y Sagitario)</em>:Los signos de fuego se caracterizan por ser impulsivos, activos, mandones, orgullosos, conquistadores y por su pasión por llegar y ser los primeros en todo lo que se proponen. En esto, son incansables. Poseen una gran autoafirmación y empuje. Pueden llegar a ser agresivos y coléricos también, no suelen pensar más de dos veces las cosas y se guían totalmente por sus impulsos. Muchos los envidian debido a su poder y a su seguridad interior.";
+                } else if (valor == "agua") {
+                    about =
+                        "<em>Con signo de agua (Cáncer, Escorpio y Piscis)</em>: La memoria, el inconsciente, el sueño, la influencia, el instinto, la fecundidad y la sensibilidad son algunas palabras relacionadas con los signos de agua. La mayoría de cangrejos, escorpiones o peces son gente de familia, soñadores, imaginativos, muy sentimentales y si, en ocasiones hasta románticos. A la vez, estos signos tienden a tener altibajos emocionales constantes, aunque, en el caso de Escorpio, es el que mejor los sabe esconder. Pueden tener más de un episodio depresivo, probablemente por que no encuentran las respuestas a algún problema.";
+                } else if (valor == "aire") {
+                    about =
+                        "<em>Con signo de aire (Géminis, Libra y Acuario)</em>: Los intercambios, la inteligencia, la adaptabilidad, la crítica, la asimilación o el pensamiento intelectualizado son algunas de las características de los signos de aire. Les encanta la buena comunicación, relacionarse con los demás, la gente inteligente pero no los listillos o listillas. Expresan cada una de sus emociones con tan sólo una mirada o un gesto. Suelen ser habladores, la gran mayoría y detestan la soledad. Pocas veces se toman un tiempo para ellos mismos.";
+                } else if (valor == "tierra"){
+                    about =
+                        "<em>Con signo de tierra (Tauro, Virgo, Capricornio)</em>: Los signos de tierra se caracterizan por la necesidad de obtener resultados concretos, analizan cada una de las situaciones en su vida e intentan seleccionar lo que realmente les interesa y les hace bien, lo intentan. Los signos de tierra, además, suelen ser ambiciosos, a veces un tanto materialistas, cuidadosos, trabajadores y perseverantes en cuanto a lo que desean conseguir realmente. Pueden perder el norte en algunas ocasiones pero acaban retomando el camino a seguir casi sin problemas. También son bastante precavidos, es decir, lo que hacen, intentan pensarlo bien para no fallar. No les agrada demasiado la gente que está demasiado en las nubes, prefieren ser prácticos y reales.";
+                } else {
+                    about = "Diseño y nuevos medios."
+                }
+
+                detalles.innerHTML += `<div><p>${about}</p></div>`;
+
+                datos.forEach((x) => {
+                    if (valor == x.zodiaco.elemento) {
+                        respuesta.innerHTML += `<article><div><img src="${x.avatar}"></div><div><p><a href="integrante.html?lista=${x.lista}">${x.nombres.split(" ")[0]} ${x.apellidos.split(" ")[0]}</a></p><p>${
+                            x.zodiaco.signo
+                        }</p></div></article>`;
+                    }
+                });
+            }
+
+            const seleccionado = document.querySelectorAll('input[name="selecciona"]');
+
+            seleccionado.forEach((i) => {
+                i.addEventListener("change", function () {
+                    var valor = this.value;
+                    if (valor !== "todos"){
+                        console.log(valor);
+                        compatibilidad(valor);
+                    } else {
+                        window.location.reload();
+                    }
+                });
+            });
+        </script>
+    </body>
+</html>
